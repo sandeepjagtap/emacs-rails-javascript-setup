@@ -15,7 +15,21 @@
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
+ ;; Interactively Do Things (highly recommended, but not strictly required)
+       (require 'ido)
+       (ido-mode t)
+     
+       ;; Rinari
+       (add-to-list 'load-path "~/.emacs.d/rinari")
+       (require 'rinari)
+
 ;; Load path etc.
+
+
+(add-to-list 'load-path "~/.emacs.d/elisp/feature-mode")
+(require 'feature-mode)
+
+(add-to-list 'auto-mode-alist '("\.feature$" . feature-mode))
 
 (setq dotfiles-dir (file-name-directory
                     (or (buffer-file-name) load-file-name)))
@@ -79,5 +93,42 @@
 (autoload 'js2-mode "js2" nil t)
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
 
+(setq sql-mysql-program "/usr/local/mysql/bin/mysql")
+
+(setq sql-user "root")
+
+(setq sql-password "p@ssw0rd")
+
+(setq sql-server "localhost")
+
+(set-frame-position (selected-frame) 0 0)
+(set-frame-size (selected-frame) 50000 50000)
+
+(require 'auto-complete-config)
+(add-to-list 'ac-dictionary-directories "~/.emacs.d//ac-dict")
+(ac-config-default)
+
+;; Replace $RSENSE_HOME with the directory where RSense was installed in full path
+;; Example for UNIX-like systems
+;; (setq rsense-home "/home/tomo/opt/rsense-0.2")
+;; or
+;; (setq rsense-home (expand-file-name "~/opt/rsense-0.2"))
+;; Example for Windows
+;; (setq rsense-home "C:\\rsense-0.2")
+(setq rsense-home "/Users/ThoughtWorks/code/rsense-0.3")
+(add-to-list 'load-path (concat rsense-home "/etc"))
+(require 'rsense)
+
+;; Complete by C-c .
+(add-hook 'ruby-mode-hook
+          (lambda ()
+            (local-set-key (kbd "C-c .") 'ac-complete-rsense)))
+
+(require 'package)
+(add-to-list 'package-archives  '("marmalade" . "http://marmalade-repo.org/packages/"))
+(package-initialize)
+
+(defun turn-on-paredit () (paredit-mode 1))
+(add-hook 'clojure-mode-hook 'turn-on-paredit)
 
 ;;; init.el ends here
